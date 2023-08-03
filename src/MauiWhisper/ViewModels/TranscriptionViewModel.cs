@@ -26,10 +26,12 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
     private string? urlField;
     private bool canStart = true;
     private List<ISubtitleLine> subtitles = new List<ISubtitleLine>();
+    private YouTubeService youTubeService;
 
     public TranscriptionViewModel(IServiceProvider services)
         : base(services)
     {
+        this.youTubeService = services.GetRequiredService<YouTubeService>();
         this.diagLogger = services.GetService<ILogger>();
         this.modelService = services.GetService(typeof(WhisperModelService)) as WhisperModelService ??
                             throw new NullReferenceException(nameof(WhisperModelService));
@@ -136,7 +138,11 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         ArgumentNullException.ThrowIfNull(nameof(this.UrlField));
         ArgumentNullException.ThrowIfNull(nameof(this.modelService.SelectedModel));
 
-        if (File.Exists(this.UrlField))
+        if (this.youTubeService.IsValidUrl(this.urlField ?? string.Empty))
+        {
+            await this.ParseAsync(await this.youTubeService.GetAudioUrlAsync(this.UrlField!), this.cts?.Token ?? CancellationToken.None);
+        }
+        else if (File.Exists(this.UrlField))
         {
             await this.LocalFileParseAsync(this.UrlField!, this.cts.Token);
         }
