@@ -12,6 +12,11 @@ MauiWhisper is a [Whisper](https://github.com/ggerganov/whisper.cpp) app written
 
 MauiWhisper uses the .NET 8 SDK. You must install .NET 8 and the MAUI Workloads to build and deploy the app. Once installed, it should "just work".
 
+For Windows and Mac, you need to install FFMpeg on your system. For Android and iOS, it uses LibVLCSharp and includes the binaries.
+
 ## Libraries
 
 [Whisper.net](https://github.com/sandrohanea/whisper.net)
+[Maui.VirtualListView](https://github.com/Redth/Maui.VirtualListView)
+[libvlcsharp](https://github.com/videolan/libvlcsharp)
+[xabe.ffmpeg](https://ffmpeg.xabe.net/)
