@@ -1,3 +1,7 @@
+// <copyright file="WhisperDownloadModelPage.xaml.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +14,10 @@ namespace MauiWhisper;
 public partial class WhisperDownloadModelPage : ContentPage
 {
     private WhisperModelDownloadViewModel vm;
-    
+
     public WhisperDownloadModelPage(IServiceProvider provider)
     {
-        InitializeComponent();
+        this.InitializeComponent();
         this.BindingContext = this.vm = provider.GetRequiredService<WhisperModelDownloadViewModel>();
     }
 

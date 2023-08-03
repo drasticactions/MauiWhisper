@@ -1,3 +1,7 @@
+// <copyright file="VlcTranscodeService.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 #if IOS || ANDROID
 using System.Text.RegularExpressions;
 using LibVLCSharp.Shared;
@@ -18,8 +22,10 @@ public class VlcTranscodeService : ITranscodeService
         this.generatedFilename = generatedFilename;
     }
 
+    /// <inheritdoc/>
     public string BasePath => this.basePath;
 
+    /// <inheritdoc/>
     public async Task<string> ProcessFile(string file)
     {
         using var mediaPlayer = new LibVLCSharp.Shared.MediaPlayer(this.libVLC);

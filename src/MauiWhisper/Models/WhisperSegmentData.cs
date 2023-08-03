@@ -1,3 +1,7 @@
+// <copyright file="WhisperSegmentData.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 namespace MauiWhisper.Models;
 
 public class WhisperSegmentData

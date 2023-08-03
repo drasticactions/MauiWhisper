@@ -31,18 +31,22 @@ namespace MauiWhisper.Models
             }
         }
 
+        /// <inheritdoc/>
         public TimeSpan Start { get; set; }
 
+        /// <inheritdoc/>
         public TimeSpan End { get; set; }
 
         public string Time => $"{this.Start} -> {this.End}";
 
+        /// <inheritdoc/>
         public string Text { get; set; }
 
         public int LineNumber { get; set; }
 
         public byte[] Image { get; set; }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

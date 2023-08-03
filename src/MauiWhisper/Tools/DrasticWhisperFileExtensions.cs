@@ -1,8 +1,12 @@
+// <copyright file="DrasticWhisperFileExtensions.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 namespace MauiWhisper.Tools;
 
- public static class DrasticWhisperFileExtensions
-    {
-        public static List<string> MFSupported = new List<string>()
+public static class DrasticWhisperFileExtensions
+{
+    public static List<string> MFSupported = new List<string>()
         {
             ".avi",
             ".wmv",
@@ -15,7 +19,7 @@ namespace MauiWhisper.Tools;
             ".mkv",
         };
 
-        public static List<string> Supported = new List<string>()
+    public static List<string> Supported = new List<string>()
         {
             ".3g2",
             ".3gp",
@@ -86,8 +90,8 @@ namespace MauiWhisper.Tools;
             ".mlp",
         };
 
-        public static string[] VideoExtensions =
-        {
+    public static string[] VideoExtensions =
+    {
                 ".3g2", ".3gp", ".3gp2", ".3gpp", ".amv", ".asf", ".avi", ".divx", ".drc", ".dv",
 
                 ".f4v", ".flv", ".gvi", ".gxf", ".ismv", ".iso", ".m1v", ".m2v", ".m2t", ".m2ts",
@@ -99,10 +103,10 @@ namespace MauiWhisper.Tools;
                 ".nsv", ".nut", ".nuv", ".ogm", ".ogv", ".ogx", ".ps", ".rec", ".rm", ".rmvb",
 
                 ".tod", ".ts", ".tts", ".vro", ".webm", ".wm", ".wmv", ".wtv", ".xesc",
-        };
+    };
 
-        public static string[] AudioExtensions =
-        {
+    public static string[] AudioExtensions =
+    {
                 ".3ga", ".a52", ".aac", ".ac3", ".adt", ".adts", ".aif", ".aifc", ".aiff", ".amr",
 
                 ".aob", ".ape", ".awb", ".caf", ".dts", ".flac", ".it", ".m4a", ".m4b", ".m4p",
@@ -112,38 +116,38 @@ namespace MauiWhisper.Tools;
                 ".oga", ".ogg", ".opus", ".oma", ".opus", ".ra", ".ram", ".rmi", ".s3m", ".spx", ".tta",
 
                 ".voc", ".vqf", ".w64", ".wav", ".wma", ".wv", ".xa", ".xm",
-        };
+    };
 
-        public static string[] SubtitleExtensions =
-        {
+    public static string[] SubtitleExtensions =
+    {
             ".srt", ".ass", ".ssa",
-        };
+    };
 
-        public enum DAFileType
+    public enum DAFileType
+    {
+        Audio,
+        Video,
+        Subtitle,
+        Other,
+    }
+
+    public static DAFileType FileTypeHelper(string ext)
+    {
+        if (VideoExtensions.Contains(ext))
         {
-            Audio,
-            Video,
-            Subtitle,
-            Other,
+            return DAFileType.Video;
         }
-
-        public static DAFileType FileTypeHelper(string ext)
+        else if (AudioExtensions.Contains(ext))
         {
-            if (VideoExtensions.Contains(ext))
-            {
-                return DAFileType.Video;
-            }
-            else if (AudioExtensions.Contains(ext))
-            {
-                return DAFileType.Audio;
-            }
-            else if (SubtitleExtensions.Contains(ext))
-            {
-                return DAFileType.Subtitle;
-            }
-            else
-            {
-                return DAFileType.Other;
-            }
+            return DAFileType.Audio;
+        }
+        else if (SubtitleExtensions.Contains(ext))
+        {
+            return DAFileType.Subtitle;
+        }
+        else
+        {
+            return DAFileType.Other;
         }
     }
+}

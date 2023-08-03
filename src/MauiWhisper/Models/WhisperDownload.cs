@@ -1,3 +1,7 @@
+// <copyright file="WhisperDownload.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Downloader;
@@ -72,6 +76,13 @@ public class WhisperDownload : INotifyPropertyChanged, IDisposable, IErrorHandle
 
     public AsyncCommand DeleteCommand { get; }
 
+    /// <inheritdoc/>
+    void IDisposable.Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
     private void UpdateButtons()
     {
         this.OnPropertyChanged(nameof(this.ShowDownloadButton));
@@ -101,12 +112,7 @@ public class WhisperDownload : INotifyPropertyChanged, IDisposable, IErrorHandle
         this.UpdateButtons();
     }
 
-    void IDisposable.Dispose()
-    {
-        this.Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
-
+    /// <inheritdoc/>
     public void HandleError(Exception ex)
     {
     }

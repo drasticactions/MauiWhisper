@@ -1,3 +1,7 @@
+// <copyright file="TranscriptionViewModel.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using System.Collections.ObjectModel;
 using Drastic.Tools;
 using Drastic.ViewModels;
@@ -63,7 +67,10 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
 
     public WhisperLanguage SelectedLanguage
     {
-        get { return this.selectedLanguage; }
+        get
+        {
+            return this.selectedLanguage;
+        }
 
         set
         {
@@ -74,7 +81,10 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
 
     public string? UrlField
     {
-        get { return this.urlField; }
+        get
+        {
+            return this.urlField;
+        }
 
         set
         {
@@ -83,7 +93,6 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         }
     }
 
-
     public double Progress
     {
         get { return this.progress; }
@@ -91,18 +100,33 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         set { this.SetProperty(ref this.progress, value); }
     }
 
-    public void OnProgress(double progress)
-        => this.Progress = progress;
-
     /// <summary>
     /// Gets the subtitles.
     /// </summary>
     public VirtualListViewAdapter<ISubtitleLine> Subtitles { get; }
 
+    public void OnProgress(double progress)
+        => this.Progress = progress;
+
+    /// <inheritdoc/>
     public void Dispose()
     {
-        Dispose(disposing: true);
+        this.Dispose(disposing: true);
         GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposedValue)
+        {
+            if (disposing)
+            {
+                this.modelService.OnUpdatedSelectedModel -= this.ModelServiceOnUpdatedSelectedModel;
+                this.whisper.OnNewWhisperSegment -= this.OnNewWhisperSegment;
+            }
+
+            this.disposedValue = true;
+        }
     }
 
     private async Task StartAsync()
@@ -170,27 +194,13 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         this.diagLogger?.LogDebug($"CSSS {e.Start} ==> {e.End} : {e.Text}");
 
         var item = new SrtSubtitleLine()
-            { Start = e.Start, End = e.End, Text = e.Text.Trim(), LineNumber = this.subtitles.Count() + 1 };
+        { Start = e.Start, End = e.End, Text = e.Text.Trim(), LineNumber = this.subtitles.Count() + 1 };
 
         this.Dispatcher.Dispatch(() =>
         {
             this.subtitles.Add(item);
             this.Subtitles.InvalidateData();
         });
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposedValue)
-        {
-            if (disposing)
-            {
-                this.modelService.OnUpdatedSelectedModel -= this.ModelServiceOnUpdatedSelectedModel;
-                this.whisper.OnNewWhisperSegment -= this.OnNewWhisperSegment;
-            }
-
-            disposedValue = true;
-        }
     }
 
     private void ModelServiceOnUpdatedSelectedModel(object? sender, EventArgs e)

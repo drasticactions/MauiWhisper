@@ -1,3 +1,7 @@
+// <copyright file="DefaultWhisperService.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using MauiWhisper.Models;
 using Whisper.net;
 
@@ -12,20 +16,26 @@ public class DefaultWhisperService : IWhisperService, IDisposable
     private WhisperProcessor? processor;
     private List<float[]> slidingBuffer = new(TotalBufferLength + 1);
 
+    /// <inheritdoc/>
     public event EventHandler<OnNewSegmentEventArgs>? OnNewWhisperSegment;
 
+    /// <inheritdoc/>
     public bool IsInitialized => this.processor is not null;
 
+    /// <inheritdoc/>
     public bool IsIndeterminate => true;
 
+    /// <inheritdoc/>
     public Action<double>? OnProgress { get; set; }
 
+    /// <inheritdoc/>
     void IDisposable.Dispose()
     {
         this.Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc/>
     public void InitModel(string path, WhisperLanguage language)
     {
         this.processor?.Dispose();
@@ -33,12 +43,14 @@ public class DefaultWhisperService : IWhisperService, IDisposable
         this.processor = this.SetupProcessor(this.factory, language);
     }
 
+    /// <inheritdoc/>
     public void InitModel(byte[] buffer, WhisperLanguage language)
     {
         this.factory = WhisperFactory.FromBuffer(buffer);
         this.processor = this.SetupProcessor(this.factory, language);
     }
 
+    /// <inheritdoc/>
     public Task ProcessAsync(string filePath, CancellationToken? cancellationToken = null)
     {
         ArgumentNullException.ThrowIfNull(this.processor);
@@ -52,11 +64,13 @@ public class DefaultWhisperService : IWhisperService, IDisposable
             cancellationToken ?? CancellationToken.None);
     }
 
+    /// <inheritdoc/>
     public Task ProcessAsync(byte[] buffer, CancellationToken? cancellationToken = null)
     {
         return this.ProcessAsync(new MemoryStream(buffer), cancellationToken);
     }
 
+    /// <inheritdoc/>
     public Task ProcessAsync(Stream stream, CancellationToken? cancellationToken = null)
     {
         ArgumentNullException.ThrowIfNull(this.processor);
@@ -66,6 +80,7 @@ public class DefaultWhisperService : IWhisperService, IDisposable
             cancellationToken ?? CancellationToken.None);
     }
 
+    /// <inheritdoc/>
     public Task ProcessBytes(byte[] e, CancellationToken? cancellationToken = null)
     {
         ArgumentNullException.ThrowIfNull(this.processor);
@@ -105,6 +120,9 @@ public class DefaultWhisperService : IWhisperService, IDisposable
         }
     }
 
+    private static bool IsSilence(float amplitude, sbyte threshold)
+        => GetDecibelsFromAmplitude(amplitude) < threshold;
+
     private WhisperProcessor SetupProcessor(WhisperFactory factory, WhisperLanguage language)
     {
         int max_threads = Math.Min(8, Environment.ProcessorCount);
@@ -124,13 +142,11 @@ public class DefaultWhisperService : IWhisperService, IDisposable
 
     private void OnNewSegment(SegmentData e)
     {
-        this.OnNewWhisperSegment?.Invoke(this,
+        this.OnNewWhisperSegment?.Invoke(
+            this,
             new OnNewSegmentEventArgs(new Models.WhisperSegmentData(e.Text, e.Start, e.End, e.MinProbability,
                 e.MaxProbability, e.Probability, e.Language)));
     }
-
-    private static bool IsSilence(float amplitude, sbyte threshold)
-        => GetDecibelsFromAmplitude(amplitude) < threshold;
 
     private static double GetDecibelsFromAmplitude(float amplitude) => 20 * Math.Log10(Math.Abs(amplitude));
 }

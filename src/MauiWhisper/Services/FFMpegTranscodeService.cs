@@ -1,3 +1,7 @@
+// <copyright file="FFMpegTranscodeService.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using Xabe.FFmpeg;
 
 namespace MauiWhisper.Services;
@@ -13,8 +17,10 @@ public class FFMpegTranscodeService : ITranscodeService
         this.generatedFilename = generatedFilename;
     }
 
+    /// <inheritdoc/>
     public string BasePath => this.basePath;
 
+    /// <inheritdoc/>
     public async Task<string> ProcessFile(string file)
     {
         var mediaInfo = await FFmpeg.GetMediaInfo(file);

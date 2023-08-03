@@ -1,4 +1,8 @@
-﻿using Android.App;
+﻿// <copyright file="MainActivity.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 

@@ -1,3 +1,7 @@
+// <copyright file="YouTubeService.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using System.Text.RegularExpressions;
 using YoutubeExplode;
 
@@ -14,6 +18,7 @@ public class YouTubeService : IOnlineVideoService
         this.youtubeRegex = new Regex(@"^(?:(?:https?:)?\/\/)?(?:www\.)?(?:m\.)?(?:youtube\.com\/(?:watch\?.*v=|embed\/|v\/|shorts\/)|youtu\.be\/)([^\s&?]+)");
     }
 
+    /// <inheritdoc/>
     public async Task<string> GetAudioUrlAsync(string url)
     {
         var match = this.youtubeRegex.Match(url);
@@ -52,6 +57,7 @@ public class YouTubeService : IOnlineVideoService
         return streamUrl ?? throw new ArgumentException(Translations.Common.NoAudioStreams);
     }
 
+    /// <inheritdoc/>
     public bool IsValidUrl(string url)
         => this.youtubeRegex.IsMatch(url);
 }

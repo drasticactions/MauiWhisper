@@ -1,3 +1,7 @@
+// <copyright file="WhisperModelDownloadViewModel.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using System.Collections.ObjectModel;
 using Drastic.ViewModels;
 using MauiWhisper.Models;
@@ -12,7 +16,8 @@ public class WhisperModelDownloadViewModel
     private WhisperModelService modelService;
     private IList<WhisperDownload> downloads = new ObservableCollection<WhisperDownload>();
 
-    public WhisperModelDownloadViewModel(IServiceProvider services) : base(services)
+    public WhisperModelDownloadViewModel(IServiceProvider services)
+        : base(services)
     {
         this.modelService = services.GetService(typeof(WhisperModelService)) as WhisperModelService ??
                             throw new NullReferenceException(nameof(WhisperModelService));

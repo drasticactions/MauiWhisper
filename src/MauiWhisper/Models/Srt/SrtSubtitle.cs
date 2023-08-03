@@ -28,8 +28,10 @@ namespace MauiWhisper.Models
             }
         }
 
+        /// <inheritdoc/>
         public List<ISubtitleLine> Lines { get; set; } = new List<ISubtitleLine>();
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

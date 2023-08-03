@@ -1,3 +1,7 @@
+// <copyright file="TranscriptionPage.xaml.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +17,10 @@ public partial class TranscriptionPage : ContentPage
 {
     private TranscriptionViewModel vm;
     private IServiceProvider provider;
+
     public TranscriptionPage(IServiceProvider provider)
     {
-        InitializeComponent();
+        this.InitializeComponent();
         this.provider = provider;
         this.BindingContext = this.vm = provider.GetRequiredService<TranscriptionViewModel>();
     }
@@ -38,7 +43,7 @@ public partial class TranscriptionPage : ContentPage
             var result = await FilePicker.Default.PickAsync();
             if (result != null)
             {
-                if (DrasticWhisperFileExtensions.VideoExtensions.Contains(Path.GetExtension(result.FileName)) 
+                if (DrasticWhisperFileExtensions.VideoExtensions.Contains(Path.GetExtension(result.FileName))
                     || DrasticWhisperFileExtensions.AudioExtensions.Contains(Path.GetExtension(result.FileName)))
                 {
                     this.vm.UrlField = result.FullPath;

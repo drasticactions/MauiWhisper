@@ -1,3 +1,7 @@
+// <copyright file="IWhisperService.cs" company="Drastic Actions">
+// Copyright (c) Drastic Actions. All rights reserved.
+// </copyright>
+
 using MauiWhisper.Models;
 
 namespace MauiWhisper.Services;
