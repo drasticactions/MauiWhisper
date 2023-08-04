@@ -14,8 +14,8 @@ public class WhisperModelDownloadViewModel
     : BaseViewModel
 {
     private WhisperModelService modelService;
-    private IList<WhisperDownload> downloads = new ObservableCollection<WhisperDownload>();
-
+    private List<WhisperDownload> downloads;
+    private IList<WhisperDownloadSection> sections = new List<WhisperDownloadSection>();
     public WhisperModelDownloadViewModel(IServiceProvider services)
         : base(services)
     {
@@ -24,9 +24,13 @@ public class WhisperModelDownloadViewModel
         this.downloads = this.modelService.AllModels
             .Select(n => new WhisperDownload(n, this.modelService, this.Dispatcher)).ToList();
         this.Downloads = new VirtualListViewAdapter<WhisperDownload>(this.downloads);
+        this.SectionedDownloads = new SectionedWhisperDownloadAdapter(this.sections);
+        this.SectionedDownloads.AddItems(this.downloads);
     }
 
     public WhisperModelService ModelService => this.modelService;
 
     public VirtualListViewAdapter<WhisperDownload> Downloads { get; }
+    
+    public SectionedWhisperDownloadAdapter SectionedDownloads { get; }
 }

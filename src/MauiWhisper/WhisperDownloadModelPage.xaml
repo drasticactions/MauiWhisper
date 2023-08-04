@@ -9,7 +9,16 @@
              ios:Page.ModalPresentationStyle="FormSheet"
              x:Class="MauiWhisper.WhisperDownloadModelPage">
     <ContentPage.Content>
-        <xct:VirtualListView Adapter="{Binding Downloads}">
+        <xct:VirtualListView Adapter="{Binding SectionedDownloads}">
+            <xct:VirtualListView.SectionHeaderTemplate>
+                <DataTemplate>
+                    <xct:VirtualViewCell>
+                        <Grid Margin="5">
+                            <Label FontAttributes="Bold" Text="{Binding Type, Converter={StaticResource GgmlTypeConverter}}"/>
+                        </Grid>
+                    </xct:VirtualViewCell>
+                </DataTemplate>
+            </xct:VirtualListView.SectionHeaderTemplate>
             <xct:VirtualListView.ItemTemplate>
                 <DataTemplate>
                     <xct:VirtualViewCell>
