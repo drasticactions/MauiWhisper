@@ -23,9 +23,15 @@ namespace MauiWhisper.Models
             {
                 this.LineNumber = int.Parse(data.ReadLine().Trim());
 
-                string secondLine = data.ReadLine();
-                this.Start = TimeSpan.ParseExact(secondLine.Substring(0, 12), @"hh\:mm\:ss\,fff", null);
-                this.End = TimeSpan.ParseExact(secondLine.Substring(17, 12), @"hh\:mm\:ss\,fff", null);
+                string secondLine = data.ReadLine() ?? string.Empty;
+                try
+                {
+                    this.Start = TimeSpan.ParseExact(secondLine.Substring(0, 12), @"hh\:mm\:ss\,fff", null);
+                    this.End = TimeSpan.ParseExact(secondLine.Substring(17, 12), @"hh\:mm\:ss\,fff", null);
+                }
+                catch (Exception)
+                {
+                }
 
                 this.Text = data.ReadToEnd().Trim();
             }

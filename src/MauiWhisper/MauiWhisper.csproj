@@ -40,20 +40,20 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.png" BaseSize="128,128"/>
+        <MauiIcon Include="Resources\AppIcon\appicon.png" BaseSize="128,128" />
 
         <!-- Splash Screen -->
-        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#eb233d" BaseSize="128,128"/>
+        <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#eb233d" BaseSize="128,128" />
 
         <!-- Images -->
-        <MauiImage Include="Resources\Images\*"/>
-        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208"/>
+        <MauiImage Include="Resources\Images\*" />
+        <MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
         <!-- Custom Fonts -->
-        <MauiFont Include="Resources\Fonts\*"/>
+        <MauiFont Include="Resources\Fonts\*" />
 
         <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)"/>
+        <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
     
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-ios'">
@@ -67,23 +67,27 @@
     </ItemGroup>
     
     <ItemGroup>
-        <PackageReference Include="Downloader" Version="3.0.4"/>
-        <PackageReference Include="Drastic.Utilities" Version="1.0.10"/>
-        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)"/>
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-preview.6.23329.7"/>
-        <PackageReference Include="Redth.Maui.VirtualListView" Version="0.2.0"/>
-        <PackageReference Include="Whisper.net" Version="1.4.6"/>
-        <PackageReference Include="Whisper.net.Runtime" Version="1.4.6"/>
+        <PackageReference Include="Downloader" Version="3.0.4" />
+        <PackageReference Include="Drastic.Utilities" Version="1.0.10" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-rc.1.23419.4" />
+        <PackageReference Include="Microsoft.SemanticKernel" Version="0.24.230918.1-preview" />
+        <PackageReference Include="Redth.Maui.VirtualListView" Version="0.2.4" />
+        <PackageReference Include="Whisper.net" Version="1.4.7" />
+        <PackageReference Include="Whisper.net.Runtime" Version="1.4.7" />
         <PackageReference Include="Xabe.FFmpeg" Version="5.2.6" />
-        <PackageReference Include="YoutubeExplode" Version="6.3.2-alpha1" />
+        <PackageReference Include="YoutubeExplode" Version="6.3.4" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-maccatalyst'">
-        <PackageReference Include="Drastic.ForbiddenControls" Version="1.5.2"/>
+        <PackageReference Include="Drastic.ForbiddenControls" Version="1.5.2" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Update="Translations\Common.ja-jp.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Translations\Common.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Common.Designer.cs</LastGenOutput>

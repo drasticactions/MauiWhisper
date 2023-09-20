@@ -10,6 +10,7 @@ using MauiWhisper.Services;
 using MauiWhisper.Tools;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Adapters;
+using Microsoft.SemanticKernel;
 
 namespace MauiWhisper.ViewModels;
 
@@ -27,6 +28,8 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
     private bool canStart = true;
     private List<ISubtitleLine> subtitles = new List<ISubtitleLine>();
     private YouTubeService youTubeService;
+    private TranslateSrtSkill translateSrtSkill;
+    private IKernel kernel;
 
     public TranscriptionViewModel(IServiceProvider services)
         : base(services)
@@ -45,8 +48,14 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         this.selectedLanguage = this.WhisperLanguages[0];
         this.cts = new CancellationTokenSource();
         this.StartCommand = new AsyncCommand(this.StartAsync, () => this.canStart, this.Dispatcher, this.ErrorHandler);
+        this.TranslateCommand = new AsyncCommand(this.TranslateAsync, () => this.canStart, this.Dispatcher, this.ErrorHandler);
         this.ExportCommand = new AsyncCommand<string>(this.ExportAsync, null, this.ErrorHandler);
         this.Subtitles = new VirtualListViewAdapter<ISubtitleLine>(this.subtitles);
+
+        var builder = new KernelBuilder();
+        builder.WithOpenAIChatCompletionService("gpt-3.5-turbo", Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? throw new NotImplementedException("OPENAI_API_KEY"));
+        this.kernel = builder.Build();
+        this.translateSrtSkill = new TranslateSrtSkill(kernel);
     }
 
     public TranscriptionViewModel(string srtText, IServiceProvider services)
@@ -62,6 +71,8 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
     public WhisperModelService ModelService => this.modelService;
 
     public AsyncCommand StartCommand { get; }
+
+    public AsyncCommand TranslateCommand { get; }
 
     public AsyncCommand<string> ExportCommand { get; }
 
@@ -131,6 +142,27 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         }
     }
 
+    private async Task TranslateAsync()
+    {
+        if (!this.subtitles.Any())
+        {
+            return;
+        }
+
+        var subtitle = new SrtSubtitle();
+        foreach (var item in this.subtitles)
+        {
+            subtitle.Lines.Add(item);
+        }
+
+        var text = subtitle.ToString();
+        var result = await this.translateSrtSkill.TranslateAsync(text, this.SelectedLanguage, this.kernel.CreateNewContext());
+        var newSubtitle = new SrtSubtitle(result);
+        this.subtitles.Clear();
+        this.subtitles.AddRange(newSubtitle.Lines);
+        this.Subtitles.InvalidateData();
+    }
+
     private async Task StartAsync()
     {
         this.subtitles.Clear();
@@ -187,7 +219,7 @@ public class TranscriptionViewModel : BaseViewModel, IDisposable
         return this.PerformBusyAsyncTask(
             async () =>
             {
-                this.whisper.InitModel(this.modelService.SelectedModel!.FileLocation, this.SelectedLanguage);
+                this.whisper.InitModel(this.modelService.SelectedModel!.FileLocation, this.WhisperLanguages.First());
 
                 await this.whisper.ProcessAsync(audioFile, token);
             },
